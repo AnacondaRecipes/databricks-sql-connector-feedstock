@@ -59,6 +59,11 @@ about:
   license_family: Apache
   license_file: LICENSE
   doc_url: https://docs.databricks.com/dev-tools/python-sql-connector.html
+  dev_url: https://github.com/databricks/databricks-sql-python
+  description: |
+    The Databricks SQL Connector for Python allows you to develop Python applications that connect to
+    Databricks clusters and SQL warehouses. It is a Thrift-based client with no dependencies on ODBC 
+    or JDBC. It conforms to the Python DB API 2.0 specification.
 
 extra:
   recipe-maintainers:
