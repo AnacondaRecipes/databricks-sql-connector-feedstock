@@ -53,7 +53,7 @@ test:
     - pyarrow
 
 about:
-  home: https://databricks.com
+  home: https://github.com/databricks/databricks-sql-python
   summary: Databricks SQL Connector for Python
   license: Apache-2.0
   license_family: Apache
