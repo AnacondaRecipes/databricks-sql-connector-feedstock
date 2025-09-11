@@ -1,21 +1,18 @@
 {% set name = "databricks-sql-connector" %}
-{% set version = "4.0.3" %}
+{% set version = "4.1.2" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_') }}-{{ version }}.tar.gz
-    sha256: 4bc4654f8a51d6da5c1628660f4f0d6f04f0d047c82417943bf4c32fa1aedd98
-  - url: https://github.com/databricks/databricks-sql-python/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: 924c83d8a840f8747ccaf2c9678dea45fc736f92ee78c30276b0c9a8ec1f98dc
-    folder: gh_src
+  url: https://github.com/{{ name.split('-')[0] }}/{{ name.split('-')[0] }}-{{ name.split('-')[1] }}-python/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 40b91f6ec4294aa1c1ecc92b2611e08eebf8c0d9c81bf05d8ee824d320770a2f
 
 build:
-  skip: True  # [py<38]
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: True  # [py<38]
 
 requirements:
   host:
@@ -33,19 +30,35 @@ requirements:
     - openpyxl >=3.0.10,<4.0.0
     - urllib3 >=1.26
     - python-dateutil >=2.8.0,<3.0.0
+    - pyjwt >=2.0.0,<3.0.0
   run_constrained:
-    - pyarrow >=14.0.1  # [py<313]
+    - pyarrow >=14.0.1  # [py>=38 and py<313]
     - pyarrow >=18.0.0  # [py>=313]
+    - requests-kerberos >=0.15.0,<1.0.0
 
 test:
   source_files:
-    - gh_src/tests
+    - tests
   imports:
     - databricks
+    - databricks.sql
+    - databricks.sql.auth
+    - databricks.sql.backend
+    - databricks.sql.cloudfetch
+    - databricks.sql.common
+    - databricks.sql.exc
+    - databricks.sql.experimental
+    - databricks.sql.parameters
+    - databricks.sql.result_set
+    - databricks.sql.session
+    - databricks.sql.telemetry
+    - databricks.sql.thrift_api
+    - databricks.sql.types
+    - databricks.sql.utils
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - cd gh_src && pytest -vv tests/unit -k "not test_init_file_contents"
+    - pytest -vv tests/unit -k "not test_init_file_contents"
   requires:
     - pip
     - python
