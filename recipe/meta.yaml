@@ -1,18 +1,18 @@
 {% set name = "databricks-sql-connector" %}
-{% set version = "4.1.2" %}
+{% set version = "4.3.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://github.com/{{ name.split('-')[0] }}/{{ name.split('-')[0] }}-{{ name.split('-')[1] }}-python/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 40b91f6ec4294aa1c1ecc92b2611e08eebf8c0d9c81bf05d8ee824d320770a2f
+  sha256: f2f59207040cf9770fc49a7867cb3ff0b546d569c13a0b300872a2345b934135
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: True  # [py<38]
+  skip: true  # [py<38]
 
 requirements:
   host:
@@ -21,20 +21,24 @@ requirements:
     - poetry-core >=1.0.0
   run:
     - python
-    - thrift >=0.16.0,<0.21.0
-    - pandas >=1.2.5,<2.3.0  # [py<313]
-    - pandas >=2.2.3,<2.3.0  # [py>=313]
-    - lz4 >=4.0.2,<5.0.0
+    - thrift >=0.22.0,<0.23.0
+    - pandas >=1.2.5,<4.0.0  # [py<313]
+    - pandas >=2.2.3,<4.0.0  # [py>=313]
+    - lz4 >=4.0.2,<5.0.0  # [py<314]
+    - lz4 >=4.4.5,<5.0.0  # [py>=314]
     - requests >=2.18.1,<3.0.0
     - oauthlib >=3.1.0,<4.0.0
     - openpyxl >=3.0.10,<4.0.0
     - urllib3 >=1.26
     - python-dateutil >=2.8.0,<3.0.0
     - pyjwt >=2.0.0,<3.0.0
+    - pybreaker >=1.0.0,<2.0.0
   run_constrained:
-    - pyarrow >=14.0.1  # [py>=38 and py<313]
-    - pyarrow >=18.0.0  # [py>=313]
+    - pyarrow >=14.0.1  # [py<313]
+    - pyarrow >=18.0.0  # [py==313]
+    - pyarrow >=22.0.0  # [py>=314]
     - requests-kerberos >=0.15.0,<1.0.0
+    - databricks-sql-kernel >=0.2,<0.3  # [py>=310]
 
 test:
   source_files:
@@ -61,7 +65,6 @@ test:
     - pytest -vv tests/unit -k "not test_init_file_contents"
   requires:
     - pip
-    - python
     - pytest >=7.1.2,<8.0.0
     - pyarrow
 
