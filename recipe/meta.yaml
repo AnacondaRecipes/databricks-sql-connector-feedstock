@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/{{ name.split('-')[0] }}/{{ name.split('-')[0] }}-{{ name.split('-')[1] }}-python/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 40b91f6ec4294aa1c1ecc92b2611e08eebf8c0d9c81bf05d8ee824d320770a2f
+  sha256: f2f59207040cf9770fc49a7867cb3ff0b546d569c13a0b300872a2345b934135
 
 build:
   number: 0
